@@ -19,6 +19,10 @@ RUN yum install -y rsync  net-tools  openssh-server  python-setuptools && easy_i
 # Update OS packages
 RUN yum update -y
 
+RUN curl http://files.amakitu.com/UnlimitedJCEPolicy.zip -o /root/UnlimitedJCEPolicy.zip
+RUN unzip /root/UnlimitedJCEPolicy.zip -d /root/
+RUN cp -rf /root/UnlimitedJCEPolicy/*.jar /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.85.x86_64/jre/lib/security/
+
 # Create a user and group used to launch processes
 # The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
 # so there is a high chance that this ID will be equal to the current user
@@ -32,8 +36,8 @@ USER jboss
 WORKDIR /opt/jboss
 
 RUN curl http://files.amakitu.com/jboss-eap-6.1.0.zip -o  /tmp/jboss-eap-6.1.0.zip
-RUN unzip /tmp/jboss-eap-6.1.0.zip -d /opt/jboss
 
+RUN unzip /tmp/jboss-eap-6.1.0.zip -d /opt/jboss
 # Add EAP_HOME environment variable, to easily upgrade the script for different EAP versions
 ENV EAP_HOME /opt/jboss/jboss-eap-6.1
 
