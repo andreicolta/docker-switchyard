@@ -14,14 +14,14 @@ RUN yum -y install java-1.7.0-openjdk-devel  unzip
 
 # Comment
 RUN echo 'Install net-tools package'
-RUN yum install -y rsync  net-tools  openssh-server  python-setuptools && easy_install supervisor
+RUN yum install -y rsync passwd  net-tools  openssh-server  python-setuptools && easy_install supervisor
 
 # Update OS packages
 RUN yum update -y
 
 RUN curl http://files.amakitu.com/UnlimitedJCEPolicy.zip -o /root/UnlimitedJCEPolicy.zip
 RUN unzip /root/UnlimitedJCEPolicy.zip -d /root/
-RUN cp -rf /root/UnlimitedJCEPolicy/*.jar /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.85.x86_64/jre/lib/security/
+RUN cp -rf /root/UnlimitedJCEPolicy/*.jar /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.91.x86_64/jre/lib/security/
 
 # Create a user and group used to launch processes
 # The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
@@ -59,6 +59,11 @@ RUN rm -rf /opt/jboss/jboss-eap-6.1/modules/system/layers/soa/org/jbpm
 RUN rm -rf /opt/jboss/jboss-eap-6.1/modules/system/layers/soa/org/kie
 RUN rm -rf /opt/jboss/jboss-eap-6.1/modules/system/layers/soa/org/mvel
 RUN rm -rf /opt/jboss/jboss-eap-6.1/modules/system/layers/soa/org/drools
+
+RUN curl http://files.amakitu.com/newrelic-java-3.23.0.zip -o /tmp/newrelic-java-3.23.0.zip
+RUN unzip /tmp/newrelic-java-3.23.0.zip  -d /opt/jboss/jboss-eap-6.1/
+RUN cd /opt/jboss/jboss-eap-6.1/newrelic && java -jar newrelic.jar install
+
 
 #Configure ssh
 USER root
